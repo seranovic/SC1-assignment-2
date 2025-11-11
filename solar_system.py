@@ -1,3 +1,11 @@
+'''A simulation of the solar system animated using the pygames module
+
+
+Controls:
+    [Enter] to reset velocities
+    [Space] to pause / unpause
+    [r] to rewind simulation.'''
+
 import numpy as np
 from scipy import constants
 import matplotlib.pyplot as plt
