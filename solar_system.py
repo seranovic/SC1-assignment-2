@@ -12,16 +12,6 @@ import matplotlib.pyplot as plt
 import pygame
 import sys
 
-#initialising pygame
-pygame.init()
-
-
-screen_width, screen_height = 800, 800 # the width and height of the screen display
-# screen
-screen = pygame.display.set_mode((screen_width,screen_height)) #screen being displayed with set mode of W and H
-# Title
-pygame.display.set_caption("Solar system sim") # screen display title
-
 #colors
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
@@ -51,14 +41,19 @@ positions = np.array([
 velocities = np.array([[0, 0], [30e3, 0], [13e3, 0],[24e3,0],[35e3,0],[96e3,0]]) #sun, Earth, Jupiter, Mars, Venus,Saturn
 masses = np.array([[2e30], [6e24], [2e27],[64e23],[486e24],[5683e26]]) #sun, Earth, Jupiter, Mars, Venus, Saturn
 
-Colors =([Earth:'BLUE',Jupiter:'LIGHT_YELLOW',Mars:'RED',:Venus:'ORANGE',Saturn:'MOCCASIN'])
+Colors =({
+    'Earth' : BLUE,
+    'Jupiter' : LIGHT_YELLOW,
+    'Mars' : RED,
+    'Venus' : ORANGE,
+    'Saturn' : MOCCASIN
+})
 
 gravitational_constant = constants.gravitational_constant
 day = 24*60*60
 year = 365*day
 time_step = 7*day
 time = 0
-
 
 def get_forces(pos, mass):
     forces = np.zeros_like(pos)
@@ -73,8 +68,6 @@ def get_forces(pos, mass):
         forces[idx] = total_force
     return forces
 
-plt.figure()
-
 while time < 4*year:
     x = positions[:, 0]
     y = positions[:, 1]
@@ -85,16 +78,13 @@ while time < 4*year:
     positions = positions + velocities * time_step
     time = time + time_step
 
-plt.axis('equal')
-plt.show()
-
 def draw_planets(surface, positions, colors, radii):
     for idx in range(len(positions)):
         pygame.draw.circle(surface, YELLOW, positions[idx], 50)
 
 
 # Initialize PyGame
-
+pygame.init()
 # Create PyGame screen:
 # 1. specify screen size
 screen_width, screen_height = 800, 600
@@ -118,13 +108,14 @@ while running:
 
             # Space code
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:  # when the space key is pressed the sim pauses
-
+            pass
             # r key code for reverse v
-        if event.type == pygame.KEYDOWN and event.key == pygame.k_r:  # when r key is pressed the velocity is reveresed.
-
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_r:  # when r key is pressed the velocity is reveresed.
+            pass
             # enter key code for positions and velocities reset when [Enter] is pressed.
-        if event.type == pygame.KEYDOWN and event.key == pygame.k_ENTER:
-    screen.fill(0,0,0)
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ENTER:
+            pass
+    screen.fill(BLACK)
 
     # Redraw the screen
 
