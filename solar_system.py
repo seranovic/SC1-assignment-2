@@ -13,18 +13,18 @@ import pygame
 import sys
 
 #colors
-BLACK = 0, 0, 0
-WHITE = 255, 255, 255
-BLUE = 0, 0, 255
-RED = 255, 0, 0
-YELLOW = 255, 255,0
-CYAN = 0,255,255
-MAGENTA = 255,0,255
-MOCCASIN = 255,228,181
-LIGHT_YELLOW = 255,255,224
-DEEP_BLUE = 0,191,255
-SKY_BLUE = 135,206,235
-ORANGE = 255,69,0
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
+YELLOW = (255, 255,0)
+CYAN = (0,255,255)
+MAGENTA = (255,0,255)
+MOCCASIN = (255,228,181)
+LIGHT_YELLOW = (255,255,224)
+DEEP_BLUE = (0,191,255)
+SKY_BLUE = (135,206,235)
+ORANGE = (255,69,0)
 
 #frame rate
 frames_per_second = 60
@@ -55,18 +55,21 @@ masses = np.array([
     # [5683e26] # saturn
 ])
 
-Colors = {
-    'Earth' : BLUE,
-    'Jupiter' : LIGHT_YELLOW,
-    'Mars' : RED,
-    'Venus' : ORANGE,
-    'Saturn' : MOCCASIN
-}
+Colors = np.array([
+    YELLOW, # Sun
+    BLUE, # Earth
+    #LIGHT_YELLOW, #Jupiter
+    #RED, # Mars
+    #ORANGE # Venus
+    #MOCCASIN # Saturn
+])
+
+# Simulation constants
 
 gravitational_constant = constants.gravitational_constant
 day = 24*60*60
 year = 365*day
-time_step = 7*day
+time_step = 31*day
 time = 0
 
 def get_forces(pos, mass):
@@ -84,14 +87,15 @@ def get_forces(pos, mass):
 
 def draw_planets(surface, positions, colors='', radii=50):
     for idx in range(len(positions)):
-        pygame.draw.circle(surface, YELLOW, positions[idx], 50)
+        pygame.draw.circle(surface, colors[idx], positions[idx], 25)
 
 def scale_coords(coords):
     global screen_width, screen_height
+    coords_game = coords.copy()
     for el in coords:
-        el[0] = el[0] / constants.astronomical_unit + screen_width / 2
-        el[1] = el[1] / constants.astronomical_unit + screen_height / 2
-    return coords
+        coords_game[0] = el[0] / constants.astronomical_unit + screen_width / 2
+        coords_game[1] = el[1] / constants.astronomical_unit + screen_height / 2
+    return coords_game
 
 
 # Initialize PyGame
@@ -132,17 +136,15 @@ while running:
             positions = pos_init
             velocities = vel_init
             masses = mass_init
+            print('RESET')
 
     screen.fill(BLACK)
 
-    draw_planets(screen, scale_coords(positions))
+    draw_planets(screen, scale_coords(positions), Colors)
 
     if moving:
-        print(scale_coords(positions))
-        x = positions[:, 0]
-        y = positions[:, 1]
-        # print(f"x: {x}")
-        # print(f"y: {y}")
+        print(f'Sun position x:{positions[0,0]}, y:{positions[0,1]}')
+        print(f'Earth position x:{positions[1, 0]}, y:{positions[1, 1]}')
         forces = get_forces(positions, masses)
         accelerations = forces / masses
         velocities = velocities + accelerations * time_step
