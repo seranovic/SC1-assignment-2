@@ -43,17 +43,13 @@ positions = np.array([
 velocities = np.array([[0, 0], [30e3, 0], [13e3, 0],[24e3,0],[35e3,0],[96e3,0]]) #sun, Earth, Jupiter, Mars, Venus,Saturn
 masses = np.array([[2e30], [6e24], [2e27],[64e23],[486e24],[5683e26]]) #sun, Earth, Jupiter, Mars, Venus, Saturn
 
-Colors =
-([Earth:'BLUE',Jupiter:'LIGHT_YELLOW',Mars:'RED',:Venus:'ORANGE',Saturn:'MOCCASIN'])
+Colors =([Earth:'BLUE',Jupiter:'LIGHT_YELLOW',Mars:'RED',:Venus:'ORANGE',Saturn:'MOCCASIN'])
 
 gravitational_constant = constants.gravitational_constant
 day = 24*60*60
 year = 365*day
 time_step = 7*day
 time = 0
-
-
-
 
 
 def get_forces(pos, mass):
