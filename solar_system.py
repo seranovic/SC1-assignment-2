@@ -14,6 +14,13 @@ import pygame
 #initialising pygame
 pygame.init()
 
+
+screen_width, screen_height = 800, 800 # the width and height of the screen display
+# screen
+screen = pygame.display.set_mode((screen_width,screen_height)) #screen being displayed with set mode of W and H
+# Title
+pygame.display.set_caption("Solar system sim") # screen display title
+
 #colors
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
@@ -80,8 +87,9 @@ while time < 4*year:
 plt.axis('equal')
 plt.show()
 
-def draw_sun(surface):
-    pygame.draw.circle(surface, 'YELLOW', (300, 200), 50)
+def draw_sun(surface,center):
+    center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+    pygame.draw.circle(surface, 'YELLOW', center, 50)
 
 
 #Game loop variables
