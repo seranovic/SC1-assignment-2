@@ -110,10 +110,10 @@ while running:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:  # when the space key is pressed the sim pauses
             pass
             # r key code for reverse v
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_r:  # when r key is pressed the velocity is reveresed.
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_r:  # when r key is pressed the velocity is reversed.
             pass
             # enter key code for positions and velocities reset when [Enter] is pressed.
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ENTER:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
             pass
     screen.fill(BLACK)
 
