@@ -9,6 +9,7 @@ Controls:
 import numpy as np
 from scipy import constants
 import matplotlib.pyplot as plt
+import pygame
 
 positions = np.array([
     [0, 0],  # Sun
@@ -52,4 +53,25 @@ while time < 4*year:
 
 plt.axis('equal')
 plt.show()
+
+#Game loop variables
+running = True
+
+#Game loop:
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    screen.fill(0,0,0)
+
+    # Redraw the screen
+
+    #Limit the framerate
+    clock.tick(frames_per_second)
+
+# Close game after the game loop
+
+pygame.quit()
+sys.exit()
 
