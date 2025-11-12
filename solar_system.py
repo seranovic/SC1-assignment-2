@@ -32,22 +32,36 @@ frames_per_second = 60
 positions = np.array([
     [0,0],  # Sun
     [0, constants.astronomical_unit],   #Earth
-    [0,5.2*constants.astronomical_unit], #Jupiter
-    [0,1.5*constants.astronomical_unit], #Mars
-    [0,0.72*constants.astronomical_unit],#Venus
-    [0,9.5*constants.astronomical_unit] #Saturn
+    # [0,5.2*constants.astronomical_unit], #Jupiter
+    # [0,1.5*constants.astronomical_unit], #Mars
+    # [0,0.72*constants.astronomical_unit],#Venus
+    # [0,9.5*constants.astronomical_unit] #Saturn
 ])
 
-velocities = np.array([[0, 0], [30e3, 0], [13e3, 0],[24e3,0],[35e3,0],[96e3,0]]) #sun, Earth, Jupiter, Mars, Venus,Saturn
-masses = np.array([[2e30], [6e24], [2e27],[64e23],[486e24],[5683e26]]) #sun, Earth, Jupiter, Mars, Venus, Saturn
+velocities = np.array([
+    [0, 0], # sun
+    [30e3, 0], # earth
+    # [13e3, 0], # jupiter
+    # [24e3,0], # mars
+    # [35e3,0], # venus
+    # [96e3,0] # saturn
+])
+masses = np.array([
+    [2e30], # sun
+    [6e24], # earth
+    # [2e27], # jupiter
+    # [64e23], # mars
+    # [486e24], # venus
+    # [5683e26] # saturn
+])
 
-Colors =({
+Colors = {
     'Earth' : BLUE,
     'Jupiter' : LIGHT_YELLOW,
     'Mars' : RED,
     'Venus' : ORANGE,
     'Saturn' : MOCCASIN
-})
+}
 
 gravitational_constant = constants.gravitational_constant
 day = 24*60*60
@@ -67,16 +81,6 @@ def get_forces(pos, mass):
         total_force = np.sum(pair_force, axis=0)
         forces[idx] = total_force
     return forces
-
-while time < 4*year:
-    x = positions[:, 0]
-    y = positions[:, 1]
-    plt.plot(x, y, 'o')
-    forces = get_forces(positions, masses)
-    accelerations = forces / masses
-    velocities = velocities + accelerations * time_step
-    positions = positions + velocities * time_step
-    time = time + time_step
 
 def draw_planets(surface, positions, colors, radii):
     for idx in range(len(positions)):
@@ -98,6 +102,7 @@ clock = pygame.time.Clock()
 
 #Game loop variables
 running = True
+moving = True
 
 #Game loop:
 
@@ -108,7 +113,7 @@ while running:
 
             # Space code
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:  # when the space key is pressed the sim pauses
-            pass
+            moving = not moving
             # r key code for reverse v
         if event.type == pygame.KEYDOWN and event.key == pygame.K_r:  # when r key is pressed the velocity is reversed.
             pass
@@ -117,7 +122,19 @@ while running:
             pass
     screen.fill(BLACK)
 
+    if moving:
+        x = positions[:, 0]
+        y = positions[:, 1]
+        print(f"x: {x}")
+        print(f"y: {y}")
+        forces = get_forces(positions, masses)
+        accelerations = forces / masses
+        velocities = velocities + accelerations * time_step
+        positions = positions + velocities * time_step
+        time = time + time_step
+
     # Redraw the screen
+    pygame.display.flip()
 
     #Limit the framerate
     clock.tick(frames_per_second)
