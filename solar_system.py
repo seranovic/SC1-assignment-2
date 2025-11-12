@@ -103,6 +103,9 @@ clock = pygame.time.Clock()
 #Game loop variables
 running = True
 moving = True
+pos_init = positions
+vel_init = velocities
+mass_init = masses
 
 #Game loop:
 
@@ -111,15 +114,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-            # Space code
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:  # when the space key is pressed the sim pauses
             moving = not moving
-            # r key code for reverse v
+
         if event.type == pygame.KEYDOWN and event.key == pygame.K_r:  # when r key is pressed the velocity is reversed.
-            pass
-            # enter key code for positions and velocities reset when [Enter] is pressed.
+            time_step = -time_step
+            print("reverse")
+
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-            pass
+            positions = pos_init
+            velocities = vel_init
+            masses = mass_init
+
     screen.fill(BLACK)
 
     if moving:
