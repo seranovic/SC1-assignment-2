@@ -82,9 +82,16 @@ def get_forces(pos, mass):
         forces[idx] = total_force
     return forces
 
-def draw_planets(surface, positions, colors, radii):
+def draw_planets(surface, positions, colors='', radii=50):
     for idx in range(len(positions)):
         pygame.draw.circle(surface, YELLOW, positions[idx], 50)
+
+def scale_coords(coords):
+    global screen_width, screen_height
+    for el in coords:
+        el[0] = el[0] / constants.astronomical_unit + screen_width / 2
+        el[1] = el[1] / constants.astronomical_unit + screen_height / 2
+    return coords
 
 
 # Initialize PyGame
@@ -128,11 +135,14 @@ while running:
 
     screen.fill(BLACK)
 
+    draw_planets(screen, scale_coords(positions))
+
     if moving:
+        print(scale_coords(positions))
         x = positions[:, 0]
         y = positions[:, 1]
-        print(f"x: {x}")
-        print(f"y: {y}")
+        # print(f"x: {x}")
+        # print(f"y: {y}")
         forces = get_forces(positions, masses)
         accelerations = forces / masses
         velocities = velocities + accelerations * time_step
