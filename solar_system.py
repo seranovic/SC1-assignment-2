@@ -10,6 +10,7 @@ import numpy as np
 from scipy import constants
 import matplotlib.pyplot as plt
 import pygame
+import sys
 
 #initialising pygame
 pygame.init()
@@ -91,6 +92,19 @@ def draw_planets(surface, positions, colors, radii):
     for idx in range(len(positions)):
         pygame.draw.circle(surface, YELLOW, positions[idx], 50)
 
+
+# Initialize PyGame
+
+# Create PyGame screen:
+# 1. specify screen size
+screen_width, screen_height = 800, 600
+# 2. define screen
+screen = pygame.display.set_mode((screen_width, screen_height))
+# 3. set caption
+pygame.display.set_caption("Solar System")
+
+# Update pygames clock use the framerate
+clock = pygame.time.Clock()
 
 #Game loop variables
 running = True
