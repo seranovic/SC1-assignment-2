@@ -87,9 +87,9 @@ while time < 4*year:
 plt.axis('equal')
 plt.show()
 
-def draw_sun(surface,center):
-    center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-    pygame.draw.circle(surface, 'YELLOW', center, 50)
+def draw_planets(surface, positions, colors, radii):
+    for idx in range(len(positions)):
+        pygame.draw.circle(surface, YELLOW, positions[idx], 50)
 
 
 #Game loop variables
