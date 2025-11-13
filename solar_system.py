@@ -11,6 +11,7 @@ from scipy import constants
 import matplotlib.pyplot as plt
 import pygame
 import sys
+import math
 
 #colors
 BLACK = (0, 0, 0)
@@ -26,42 +27,48 @@ DEEP_BLUE = (0,191,255)
 SKY_BLUE = (135,206,235)
 ORANGE = (255,69,0)
 
-#frame rate
-frames_per_second = 60
-
 positions = np.array([
     [0,0],  # Sun
     [0, constants.astronomical_unit],   #Earth
-    # [0,5.2*constants.astronomical_unit], #Jupiter
-    # [0,1.5*constants.astronomical_unit], #Mars
-    # [0,0.72*constants.astronomical_unit],#Venus
-    # [0,9.5*constants.astronomical_unit] #Saturn
+    [0,5.2*constants.astronomical_unit], #Jupiter
+    [0,1.5*constants.astronomical_unit], #Mars
+    [0,0.72*constants.astronomical_unit],#Venus
+    [0,9.5*constants.astronomical_unit] #Saturn
 ])
 
 velocities = np.array([
     [0, 0], # sun
     [30e3, 0], # earth
-    # [13e3, 0], # jupiter
-    # [24e3,0], # mars
-    # [35e3,0], # venus
-    # [96e3,0] # saturn
+    [13e3, 0], # jupiter
+    [24e3,0], # mars
+    [35e3,0], # venus
+    [96e3,0] # saturn
 ])
 masses = np.array([
     [2e30], # sun
     [6e24], # earth
-    # [2e27], # jupiter
-    # [64e23], # mars
-    # [486e24], # venus
-    # [5683e26] # saturn
+    [2e27], # jupiter
+    [64e23], # mars
+    [486e24], # venus
+    [5683e26] # saturn
 ])
 
 Colors = np.array([
     YELLOW, # Sun
     BLUE, # Earth
-    #LIGHT_YELLOW, #Jupiter
-    #RED, # Mars
-    #ORANGE # Venus
-    #MOCCASIN # Saturn
+    LIGHT_YELLOW, #Jupiter
+    RED, # Mars
+    ORANGE, # Venus
+    MOCCASIN # Saturn
+])
+
+radii = np.array([
+    50, #SUN
+    10, # Earth'
+    20, # Jupiter
+    10, # Mars
+    5, # Venus
+    25, # Saturn
 ])
 
 # Simulation constants
@@ -69,7 +76,7 @@ Colors = np.array([
 gravitational_constant = constants.gravitational_constant
 day = 24*60*60
 year = 365*day
-time_step = 31*day
+time_step = day
 time = 0
 
 def get_forces(pos, mass):
@@ -85,16 +92,16 @@ def get_forces(pos, mass):
         forces[idx] = total_force
     return forces
 
-def draw_planets(surface, positions, colors='', radii=50):
+def draw_planets(surface, positions, colors, radii):
     for idx in range(len(positions)):
-        pygame.draw.circle(surface, colors[idx], positions[idx], 25)
+        pygame.draw.circle(surface, colors[idx], positions[idx], radii[idx])
 
 def scale_coords(coords):
     global screen_width, screen_height
     coords_game = coords.copy()
-    for el in coords:
-        coords_game[0] = el[0] / constants.astronomical_unit + screen_width / 2
-        coords_game[1] = el[1] / constants.astronomical_unit + screen_height / 2
+    for idx in range(len(coords)):
+            coords_game[idx,0] = 100*coords[idx,0]/1e11 + screen_width / 2
+            coords_game[idx,1] = 100*coords[idx,1]/1e11 + screen_height / 2
     return coords_game
 
 
@@ -102,11 +109,15 @@ def scale_coords(coords):
 pygame.init()
 # Create PyGame screen:
 # 1. specify screen size
-screen_width, screen_height = 800, 600
+screen_width, screen_height = 800, 800
 # 2. define screen
 screen = pygame.display.set_mode((screen_width, screen_height))
 # 3. set caption
 pygame.display.set_caption("Solar System")
+
+#frame rate
+frames_per_second = 60
+
 
 # Update pygames clock use the framerate
 clock = pygame.time.Clock()
@@ -140,11 +151,19 @@ while running:
 
     screen.fill(BLACK)
 
-    draw_planets(screen, scale_coords(positions), Colors)
+    # draw celestial objects
+
+    draw_planets(screen, scale_coords(positions), Colors, radii)
 
     if moving:
-        print(f'Sun position x:{positions[0,0]}, y:{positions[0,1]}')
-        print(f'Earth position x:{positions[1, 0]}, y:{positions[1, 1]}')
+        x = positions[:, 0]
+        y = positions[:, 1]
+        plt.plot(x, y, 'o')
+        #print(f'Sun position x:{positions[0,0]}, y:{positions[0,1]}')
+        #print(f'Earth position x:{positions[1, 0]}, y:{positions[1, 1]}')
+        print(f'Sun position x:{scale_coords(positions)[0, 0]}, y:{scale_coords(positions)[0, 1]}')
+        print(f'Earth position x:{scale_coords(positions)[1, 0]}, y:{scale_coords(positions)[1, 1]}')
+        print(f'Venus position x:{scale_coords(positions)[2, 0]}, y:{scale_coords(positions)[2, 1]}')
         forces = get_forces(positions, masses)
         accelerations = forces / masses
         velocities = velocities + accelerations * time_step
@@ -160,5 +179,8 @@ while running:
 # Close game after the game loop
 
 pygame.quit()
+plt.show()
+plt.axis('equal')
 sys.exit()
+
 
